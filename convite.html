@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>💖 Convite Especial</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            background: #1a0a1e;
+        }
+
+        /* ===== CONTAINER PRINCIPAL ===== */
+        .slides-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ===== CADA SLIDE ===== */
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 30px;
+            text-align: center;
+            background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 50%, #e8eaf6 100%);
+            
+            /* ===== FADE SUAVE ===== */
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 10;
+        }
+
+        /* ===== CORAÇÕES DE FUNDO ===== */
+        .slide-hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .heart-particle {
+            position: absolute;
+            font-size: 20px;
+            animation: floatUp linear infinite;
+            opacity: 0.1;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100%) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.1; }
+            90% { opacity: 0.1; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* ===== CONTEÚDO DO SLIDE ===== */
+        .slide-content {
+            position: relative;
+            z-index: 1;
+            max-width: 650px;
+            width: 100%;
+        }
+
+        .slide .emoji-big {
+            font-size: 5rem;
+            display: block;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .slide h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, #d81b60, #7b1fa2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .slide h2 {
+            font-size: 2.2rem;
+            color: #4a148c;
+            margin-bottom: 15px;
+        }
+
+        .slide p {
+            font-size: 1.2rem;
+            color: #4a148c;
+            line-height: 1.8;
+            font-weight: 300;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .slide .highlight {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 20px 30px;
+            border-radius: 25px;
+            display: inline-block;
+            margin: 15px 0;
+            border: 2px solid #d81b60;
+            box-shadow: 0 8px 30px rgba(216, 27, 96, 0.1);
+        }
+
+        .slide .date-info {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #d81b60;
+        }
+
+        .slide .sub-text {
+            font-size: 0.95rem;
+            color: #7b1fa2;
+            opacity: 0.7;
+            margin-top: 10px;
+        }
+
+        /* ===== SLIDE FINAL - BOTÕES ===== */
+        .slide-final {
+            position: relative;
+        }
+
+        .slide-final .btn-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin-top: 35px;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            min-height: 100px;
+            flex-wrap: wrap;
+            position: relative;
+        }
+
+        /* ===== BOTÃO SIM ===== */
+        .slide-final .btn-sim {
+            background: linear-gradient(135deg, #d81b60, #c2185b);
+            color: white;
+            border: none;
+            padding: 20px 55px;
+            border-radius: 60px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 8px 30px rgba(216, 27, 96, 0.4);
+            font-family: 'Poppins', sans-serif;
+            min-width: 200px;
+            position: relative;
+            z-index: 5;
+            flex-shrink: 0;
+        }
+
+        .slide-final .btn-sim:hover {
+            transform: scale(1.08) translateY(-3px);
+            box-shadow: 0 12px 40px rgba(216, 27, 96, 0.5);
+        }
+
+        .slide-final .btn-sim:active {
+            transform: scale(0.95);
+        }
+
+        /* ===== BOTÃO NÃO ===== */
+        .slide-final .btn-nao {
+            background: linear-gradient(135deg, #bdbdbd, #9e9e9e);
+            color: white;
+            border: none;
+            padding: 20px 55px;
+            border-radius: 60px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            font-family: 'Poppins', sans-serif;
+            min-width: 200px;
+            user-select: none;
+            touch-action: none;
+            flex-shrink: 0;
+            transition: none;
+            z-index: 5;
+            position: relative;
+        }
+
+        .slide-final .btn-nao.fugindo {
+            position: fixed !important;
+            transition: none !important;
+            z-index: 999 !important;
+        }
+
+        /* ===== INDICADORES ===== */
+        .slide-indicators {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+            background: rgba(255,255,255,0.3);
+            backdrop-filter: blur(10px);
+            padding: 12px 20px;
+            border-radius: 50px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.4);
+            border: 2px solid rgba(216, 27, 96, 0.3);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .dot.active {
+            background: #d81b60;
+            transform: scale(1.4);
+            border-color: #d81b60;
+            box-shadow: 0 0 20px rgba(216, 27, 96, 0.4);
+        }
+
+        .dot:hover {
+            transform: scale(1.2);
+        }
+
+        /* ===== SETAS ===== */
+        .nav-arrows {
+            position: fixed;
+            bottom: 100px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 50;
+            pointer-events: none;
+        }
+
+        .nav-arrow {
+            pointer-events: auto;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: #4a148c;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .nav-arrow:hover {
+            background: rgba(216, 27, 96, 0.8);
+            color: white;
+            border-color: #d81b60;
+            transform: scale(1.1);
+        }
+
+        .nav-arrow:active {
+            transform: scale(0.9);
+        }
+
+        .nav-arrow.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(20px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            padding: 20px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            animation: fadeInModal 0.6s ease;
+        }
+
+        @keyframes fadeInModal {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 50px;
+            padding: 50px 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+            animation: bounceIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.5) rotate(-10deg); }
+            100% { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+
+        .modal-content .big-emoji {
+            font-size: 5rem;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .modal-content h2 {
+            color: #d81b60;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.8rem;
+        }
+
+        .modal-content p {
+            color: #4a148c;
+            font-size: 1.1rem;
+            margin: 15px 0;
+            line-height: 1.8;
+        }
+
+        .modal-content .btn-fechar {
+            background: linear-gradient(135deg, #d81b60, #ad1457);
+            color: white;
+            border: none;
+            padding: 14px 45px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+            margin-top: 10px;
+        }
+
+        .modal-content .btn-fechar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(216, 27, 96, 0.3);
+        }
+
+        /* ===== CONFETES ===== */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            font-size: 2.5rem;
+            animation: confettiFall linear forwards;
+        }
+
+        @keyframes confettiFall {
+            0% { opacity: 1; transform: translateY(-10vh) rotate(0deg) scale(1); }
+            100% { opacity: 0; transform: translateY(110vh) rotate(720deg) scale(0.2); }
+        }
+
+        /* ===== RESPONSIVO ===== */
+        @media (max-width: 768px) {
+            .slide h1 { font-size: 2.8rem; }
+            .slide h2 { font-size: 1.8rem; }
+            .slide p { font-size: 1rem; }
+            .slide .emoji-big { font-size: 4rem; }
+            
+            .slide-final .btn-container {
+                gap: 20px;
+                min-height: 90px;
+            }
+
+            .slide-final .btn-sim,
+            .slide-final .btn-nao {
+                padding: 16px 35px;
+                font-size: 1.1rem;
+                min-width: 150px;
+            }
+
+            .nav-arrow {
+                width: 50px;
+                height: 50px;
+                font-size: 1.4rem;
+            }
+
+            .slide-indicators {
+                bottom: 20px;
+                padding: 10px 15px;
+                gap: 10px;
+            }
+
+            .modal-content {
+                padding: 35px 25px;
+                margin: 15px;
+            }
+            
+            .modal-content h2 { font-size: 2.2rem; }
+        }
+
+        @media (max-width: 480px) {
+            .slide { padding: 30px 20px; }
+            .slide h1 { font-size: 2.2rem; }
+            .slide h2 { font-size: 1.5rem; }
+            .slide p { font-size: 0.9rem; }
+            .slide .emoji-big { font-size: 3.5rem; }
+            
+            .slide-final .btn-container {
+                gap: 15px;
+                min-height: 80px;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .slide-final .btn-sim,
+            .slide-final .btn-nao {
+                padding: 14px 25px;
+                font-size: 1rem;
+                min-width: 120px;
+            }
+
+            .nav-arrow {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .slide-indicators {
+                bottom: 15px;
+                padding: 8px 12px;
+                gap: 8px;
+            }
+
+            .dot {
+                width: 10px;
+                height: 10px;
+            }
+
+            .modal-content .big-emoji { font-size: 4rem; }
+            .modal-content h2 { font-size: 1.8rem; }
+            .modal-content p { font-size: 0.95rem; }
+        }
+
+        @media (max-height: 600px) {
+            .slide .emoji-big { font-size: 3rem; margin-bottom: 10px; }
+            .slide h1 { font-size: 2rem; margin-bottom: 8px; }
+            .slide h2 { font-size: 1.4rem; margin-bottom: 8px; }
+            .slide p { font-size: 0.85rem; line-height: 1.4; }
+            .slide .highlight { padding: 12px 20px; margin: 8px 0; }
+            .slide-final .btn-container { margin-top: 15px; min-height: 70px; }
+            .slide-final .btn-sim, .slide-final .btn-nao { padding: 10px 25px; font-size: 0.9rem; min-width: 100px; }
+            .nav-arrows { bottom: 70px; }
+            .slide-indicators { bottom: 12px; padding: 6px 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== SLIDES ===== -->
+<div class="slides-container" id="slidesContainer">
+
+    <!-- SLIDE 1 -->
+    <div class="slide active" data-index="0">
+        <div class="slide-hearts" id="hearts0"></div>
+        <div class="slide-content">
+            <span class="emoji-big">🌸</span>
+            <h1>Oi, Minha pequena!</h1>
+            <p>Preparei cada detalhe desse convite pensando em você...</p>
+            <p class="sub-text">💕 Vamos juntos nessa história?</p>
+        </div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="slide" data-index="1">
+        <div class="slide-hearts" id="hearts1"></div>
+        <div class="slide-content">
+            <span class="emoji-big">💌</span>
+            <h2>Quer ir comigo em um date?</h2>
+            <div class="highlight">
+                <p style="font-weight:400;">📅 <strong>Dia:</strong> <span class="date-info">04 de Julho de 2026</span></p>
+                <p style="font-weight:400;">⏰ <strong>Hora:</strong> <span class="date-info">19h</span></p>
+                <p style="font-weight:400;">📍 <strong>Local:</strong> <span class="date-info">À decidir</span></p>
+            </div>
+            <p class="sub-text">(Depois te conto os detalhes surpresa! 🤫)</p>
+        </div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="slide" data-index="2">
+        <div class="slide-hearts" id="hearts2"></div>
+        <div class="slide-content">
+            <span class="emoji-big">🎬</span>
+            <h2>O que vamos fazer?</h2>
+            <p>🍝 Jantar incrível no melhor restaurante</p>
+            <p class="sub-text" style="margin-top:15px;">✨ E surpresas que só você merece ✨</p>
+        </div>
+    </div>
+
+    <!-- SLIDE 4 -->
+    <div class="slide" data-index="3">
+        <div class="slide-hearts" id="hearts3"></div>
+        <div class="slide-content">
+            <span class="emoji-big">💖</span>
+            <h2>Por que você?</h2>
+            <p>✨ Seu sorriso ilumina meu dia</p>
+            <p>🌈 Sua presença é meu lugar favorito</p>
+            <p>🌟 Com você, tudo é mais especial</p>
+            <p class="sub-text" style="margin-top:15px;">(E tem muito mais motivos...)</p>
+        </div>
+    </div>
+
+    <!-- SLIDE 5 - Final com Botões -->
+    <div class="slide slide-final" data-index="4">
+        <div class="slide-hearts" id="hearts4"></div>
+        <div class="slide-content">
+            <span class="emoji-big">🥰</span>
+            <h2 style="font-family:'Dancing Script', cursive; font-size:3rem; color:#d81b60;">
+                Então...
+            </h2>
+            <p style="font-size:1.6rem; font-weight:700; color:#d81b60; margin:10px 0;">
+                Você aceita esse date comigo?
+            </p>
+            
+            <div class="btn-container" id="btnContainer">
+                <button class="btn-sim" id="btnSim">
+                    💖 SIM! Quero muito!
+                </button>
+                <button class="btn-nao" id="btnNao">
+                    😅 Não
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== INDICADORES ===== -->
+<div class="slide-indicators" id="indicators">
+    <span class="dot active" data-index="0"></span>
+    <span class="dot" data-index="1"></span>
+    <span class="dot" data-index="2"></span>
+    <span class="dot" data-index="3"></span>
+    <span class="dot" data-index="4"></span>
+</div>
+
+<!-- ===== SETAS ===== -->
+<div class="nav-arrows">
+    <button class="nav-arrow hidden" id="prevArrow">‹</button>
+    <button class="nav-arrow" id="nextArrow">›</button>
+</div>
+
+<!-- ===== MODAL ===== -->
+<div class="modal-overlay" id="modalSurpresa">
+    <div class="modal-content">
+        <span class="big-emoji">🎉</span>
+        <h2>Você disse SIM! 💖</h2>
+        <p>
+            Que notícia maravilhosa! 🥰<br />
+            Já estou contando os segundos para o nosso date!
+        </p>
+        <p style="font-size:0.95rem; color:#7b1fa2; background:#f3e5f5; padding:12px; border-radius:15px;">
+            📍 <strong>Restaurante</strong><br />
+            ⏰ <strong>04/07/2026 • 19h</strong>
+        </p>
+        <button class="btn-fechar" id="fecharModal">💕 Fechar</button>
+    </div>
+</div>
+
+<!-- ===== CONFETES ===== -->
+<div class="confetti-container" id="confettiContainer"></div>
+
+<script>
+    // =============================================
+    // 1. CONTROLE DE SLIDES (FADE SUAVE)
+    // =============================================
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    const prevArrow = document.getElementById('prevArrow');
+    const nextArrow = document.getElementById('nextArrow');
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+    let isAnimating = false;
+
+    function goToSlide(index) {
+        if (isAnimating) return;
+        if (index < 0) index = 0;
+        if (index >= totalSlides) index = totalSlides - 1;
+        if (index === currentSlide) return;
+
+        isAnimating = true;
+
+        // Remove active do slide atual
+        slides[currentSlide].classList.remove('active');
+        
+        // Adiciona active no novo slide
+        slides[index].classList.add('active');
+        currentSlide = index;
+        
+        // Atualiza dots
+        dots.forEach(d => d.classList.remove('active'));
+        dots[index].classList.add('active');
+
+        // Mostra/esconde setas
+        prevArrow.classList.toggle('hidden', index === 0);
+        nextArrow.classList.toggle('hidden', index === totalSlides - 1);
+
+        // Se voltar para o último slide, reseta o botão NÃO
+        if (index === totalSlides - 1) {
+            setTimeout(resetNaoPosition, 300);
+        }
+
+        setTimeout(() => {
+            isAnimating = false;
+        }, 600);
+    }
+
+    // Eventos das setas
+    prevArrow.addEventListener('click', () => goToSlide(currentSlide - 1));
+    nextArrow.addEventListener('click', () => goToSlide(currentSlide + 1));
+
+    // Eventos dos dots
+    dots.forEach(dot => {
+        dot.addEventListener('click', () => {
+            goToSlide(parseInt(dot.dataset.index));
+        });
+    });
+
+    // Teclado
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') goToSlide(currentSlide - 1);
+        if (e.key === 'ArrowRight') goToSlide(currentSlide + 1);
+    });
+
+    // Touch swipe
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    document.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+    
+    document.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        const diff = touchStartX - touchEndX;
+        if (Math.abs(diff) > 50) {
+            if (diff > 0) goToSlide(currentSlide + 1);
+            else goToSlide(currentSlide - 1);
+        }
+    });
+
+    // =============================================
+    // 2. BOTÃO "NÃO" FUGINDO
+    // =============================================
+    const btnNao = document.getElementById('btnNao');
+    const btnContainer = document.getElementById('btnContainer');
+    const btnSim2 = document.getElementById('btnSim');
+    let fujaoCount = 0;
+    let isFugindo = false;
+
+    function fugir(event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        if (currentSlide !== totalSlides - 1) return;
+        if (isFugindo) return;
+        isFugindo = true;
+
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+        const btnRect = btnNao.getBoundingClientRect();
+        const btnWidth = btnRect.width;
+        const btnHeight = btnRect.height;
+        const margin = 20;
+
+        const maxX = windowWidth - btnWidth - margin;
+        const maxY = windowHeight - btnHeight - margin;
+
+        let randomX = Math.max(margin, Math.random() * maxX);
+        let randomY = Math.max(margin, Math.random() * maxY);
+
+        // Evita ficar em cima do SIM
+        const simRect = btnSim2.getBoundingClientRect();
+        const simCenterX = simRect.left + simRect.width / 2;
+        const simCenterY = simRect.top + simRect.height / 2;
+        let distance = Math.sqrt(
+            Math.pow((randomX + btnWidth/2) - simCenterX, 2) + 
+            Math.pow((randomY + btnHeight/2) - simCenterY, 2)
+        );
+
+        let attempts = 0;
+        while (distance < 200 && attempts < 20) {
+            randomX = Math.max(margin, Math.random() * maxX);
+            randomY = Math.max(margin, Math.random() * maxY);
+            distance = Math.sqrt(
+                Math.pow((randomX + btnWidth/2) - simCenterX, 2) + 
+                Math.pow((randomY + btnHeight/2) - simCenterY, 2)
+            );
+            attempts++;
+        }
+
+        btnNao.style.position = 'fixed';
+        btnNao.style.left = randomX + 'px';
+        btnNao.style.top = randomY + 'px';
+        btnNao.style.transform = `scale(${0.7 + Math.random() * 0.6}) rotate(${(Math.random() - 0.5) * 30}deg)`;
+        btnNao.style.zIndex = '999';
+        btnNao.classList.add('fugindo');
+
+        const frases = [
+            '😅 Não', '🤔 Tem certeza?', '😏 Pensa bem...',
+            '🥺 Por favor?', '😘 Clique em SIM', '💕 Vem comigo!',
+            '🌟 SIM é melhor!', '😈 Não vai conseguir!', 
+            '😜 Tenta de novo!', '🥰 Eu sei que quer!',
+            '💖 O SIM é mais legal!', '😇 Vem pro lado bom!'
+        ];
+        btnNao.textContent = frases[fujaoCount % frases.length];
+        fujaoCount++;
+
+        const cores = ['#e57373', '#f06292', '#ce93d8', '#90caf9', '#a5d6a7', '#ffd54f', '#ff8a65', '#4dd0e1'];
+        const corIndex = fujaoCount % cores.length;
+        btnNao.style.background = `linear-gradient(135deg, ${cores[corIndex]}, ${cores[(corIndex+1) % cores.length]})`;
+
+        setTimeout(() => {
+            isFugindo = false;
+        }, 100);
+    }
+
+    function resetNaoPosition() {
+        btnNao.style.position = 'relative';
+        btnNao.style.left = 'auto';
+        btnNao.style.top = 'auto';
+        btnNao.style.transform = 'scale(1) rotate(0deg)';
+        btnNao.style.background = 'linear-gradient(135deg, #bdbdbd, #9e9e9e)';
+        btnNao.textContent = '😅 Não';
+        btnNao.classList.remove('fugindo');
+        btnNao.style.zIndex = '5';
+        isFugindo = false;
+    }
+
+    // Eventos
+    btnNao.addEventListener('mouseenter', fugir);
+    btnNao.addEventListener('mousemove', fugir);
+    
+    btnNao.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        fugir(e);
+    }, { passive: false });
+    
+    btnNao.addEventListener('touchmove', function(e) {
+        e.preventDefault();
+        fugir(e);
+    }, { passive: false });
+    
+    btnNao.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        fugir(e);
+        
+        if (currentSlide === totalSlides - 1) {
+            const msgs = [
+                '😂 Não desista, clique em SIM!',
+                '😘 Você sabe que quer SIM!',
+                '💖 O SIM está te esperando!',
+                '🥰 Vamos, clique em SIM!',
+                '😈 Você não vai me pegar!'
+            ];
+            alert(msgs[Math.floor(Math.random() * msgs.length)]);
+        }
+    });
+
+    btnNao.addEventListener('mousedown', function(e) {
+        if (e.button === 0) {
+            e.preventDefault();
+            fugir(e);
+        }
+    });
+
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            if (currentSlide === totalSlides - 1) {
+                resetNaoPosition();
+            }
+        }, 500);
+    });
+
+    setTimeout(resetNaoPosition, 300);
+
+    // =============================================
+    // 3. BOTÃO "SIM"
+    // =============================================
+    const modal = document.getElementById('modalSurpresa');
+    const confettiContainer = document.getElementById('confettiContainer');
+
+    btnSim2.addEventListener('click', function() {
+        if (currentSlide !== totalSlides - 1) return;
+        
+        modal.classList.add('show');
+        lancarConfetes();
+        
+        this.style.transform = 'scale(0.9)';
+        setTimeout(() => this.style.transform = 'scale(1.06)', 150);
+        setTimeout(() => this.style.transform = 'scale(1)', 300);
+
+        btnNao.style.opacity = '0';
+        btnNao.style.pointerEvents = 'none';
+        setTimeout(() => {
+            btnNao.style.opacity = '1';
+            btnNao.style.pointerEvents = 'auto';
+            resetNaoPosition();
+        }, 3000);
+    });
+
+    document.getElementById('fecharModal').addEventListener('click', () => {
+        modal.classList.remove('show');
+    });
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.remove('show');
+    });
+
+    // =============================================
+    // 4. CONFETES
+    // =============================================
+    function lancarConfetes() {
+        const emojis = ['🎉', '🎊', '💖', '❤️', '✨', '🌟', '🥳', '🎈', '💕', '🌸', '🌈', '⭐', '🎆'];
+        const container = confettiContainer;
+        
+        for (let i = 0; i < 80; i++) {
+            const confetti = document.createElement('div');
+            confetti.classList.add('confetti-piece');
+            confetti.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.fontSize = (1.5 + Math.random() * 3) + 'rem';
+            confetti.style.animationDuration = (2 + Math.random() * 4) + 's';
+            confetti.style.animationDelay = (Math.random() * 2.5) + 's';
+            container.appendChild(confetti);
+            setTimeout(() => confetti.remove(), 6000);
+        }
+    }
+
+    // =============================================
+    // 5. CORAÇÕES
+    // =============================================
+    function criarCoracoes(slideId, quantidade) {
+        const container = document.getElementById(slideId);
+        const emojis = ['❤️', '💖', '💕', '💗', '💘', '🌸', '💝'];
+        for (let i = 0; i < quantidade; i++) {
+            const heart = document.createElement('span');
+            heart.classList.add('heart-particle');
+            heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = (8 + Math.random() * 14) + 's';
+            heart.style.fontSize = (14 + Math.random() * 35) + 'px';
+            heart.style.animationDelay = (Math.random() * 18) + 's';
+            container.appendChild(heart);
+        }
+    }
+
+    criarCoracoes('hearts0', 20);
+    criarCoracoes('hearts1', 25);
+    criarCoracoes('hearts2', 22);
+    criarCoracoes('hearts3', 28);
+    criarCoracoes('hearts4', 35);
+
+    console.log('💖 Apresentação com FADE SUAVE carregada!');
+    console.log('🌟 Transição leve e elegante entre os slides!');
+</script>
+
+</body>
+</html>
